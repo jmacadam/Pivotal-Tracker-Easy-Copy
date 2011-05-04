@@ -1,17 +1,61 @@
 <html>
   <head>
     <script type="text/javascript">
+      
+        
       chrome.extension.onRequest.addListener(function (request, sender, callback) {
           if(request.action == "pageStart") {
             chrome.pageAction.show(sender.tab.id);
+            chrome.contextMenus.removeAll();//"parentId": parent,
+            
+            var id = chrome.contextMenus.create({
+                        "title": "Pivotal/Git",
+                        "documentUrlPatterns": ["https://www.pivotaltracker.com/*","http://www.pivotaltracker.com/*"]
+                      });
+                      
+                      chrome.contextMenus.create({
+                        "parentId": id,
+                        "title": "Copy Story ID",
+                        "documentUrlPatterns": ["https://www.pivotaltracker.com/*","http://www.pivotaltracker.com/*"],
+                        "onclick": function(info, tab){
+                          chrome.tabs.sendRequest(sender.tab.id, {action: 'copyId'}, function(text){
+                              copy_text(text);
+                            });
+                          }
+                      });
+                      chrome.contextMenus.create({
+                                  "parentId": id,
+                                  "title": "Copy Commit",
+                                  "documentUrlPatterns": ["https://www.pivotaltracker.com/*","http://www.pivotaltracker.com/*"],
+                                  "onclick": function(info, tab){
+                                    chrome.tabs.sendRequest(sender.tab.id, {action: 'copyCommit'}, function(text){
+                                        copy_text(text);
+                                      });
+                                    }
+                                });
+                      chrome.contextMenus.create({
+                                  "parentId": id,
+                                  "title": "Copy Branch",
+                                  "documentUrlPatterns": ["https://www.pivotaltracker.com/*","http://www.pivotaltracker.com/*"],
+                                  "onclick": function(info, tab){
+                                    chrome.tabs.sendRequest(sender.tab.id, {action: 'copyBranch'}, function(text){
+                                        copy_text(text);
+                                      });
+                                    }
+                                });
           }
           else {
-            var theTextArea = document.getElementById('the_text_area');
-            theTextArea.value = request.text;
-            theTextArea.select();
-            document.execCommand("Copy");
+            copy_text(request.text);
           }
       });
+      
+      function copy_text(text){
+        var theTextArea = document.getElementById('the_text_area');
+        theTextArea.value = text;
+        theTextArea.select();
+        document.execCommand("Copy");
+      }
+      
     </script>
   </head>
   <body>
