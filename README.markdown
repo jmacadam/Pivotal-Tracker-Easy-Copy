@@ -1,4 +1,4 @@
-Pivotal Tracker Easy Copy
+Pivotal Tracker Easy Copy p2
 
 ## IN THIS BRANCH
 Difference with this fork are 3 context menus that do useful stuff.
