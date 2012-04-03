@@ -1,6 +1,5 @@
 Pivotal Tracker Easy Copy
 
-
 ## IN THIS BRANCH
 Difference with this fork are 3 context menus that do useful stuff.
 
